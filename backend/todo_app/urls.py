@@ -4,3 +4,4 @@ urlpatterns = [
     path("", TodoListGetCreateView.as_view(), name='todo-list-create'),
     path('<int:pk>/', TodoDetailUpdateDeleteView.as_view(), name='todo-detail-update-delete'),
 ]
+   

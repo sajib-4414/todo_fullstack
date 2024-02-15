@@ -1,0 +1,38 @@
+version: '3'
+services:
+  todo-service:
+    build:
+      context: ./backend  # Relative path to the todo-service folder
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app  # Map the volume for the code in the todo-service folder
+    ports:
+      - "8001:8000"
+    depends_on:
+      todo-db:
+        condition: service_healthy
+    networks:
+      - internal-net
+
+  todo-db:
+    image: postgres:15-alpine
+    volumes:
+      - ./todo_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=todo_db
+    networks:
+      - internal-net
+    healthcheck:
+      test: ["CMD", "sh", "-c", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+networks:
+  internal-net:
+    driver: bridge

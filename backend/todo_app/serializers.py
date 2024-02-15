@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 from todo_app.models import Todo
-
+from django.contrib.auth.models import User
 
 class TodoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,3 +15,5 @@ class TodoUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
         exclude = ('author', )
+
+

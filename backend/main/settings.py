@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'todo_app',
     'rest_framework',
     'rest_framework_simplejwt',
+    'user_app'
 ]
 
 MIDDLEWARE = [
@@ -77,9 +78,13 @@ WSGI_APPLICATION = "main.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'todo_db',
+        'USER': 'root',
+        'PASSWORD':'root',
+        'HOST': 'todo-db',
+        'PORT': '5432'
     }
 }
 
@@ -126,9 +131,6 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
