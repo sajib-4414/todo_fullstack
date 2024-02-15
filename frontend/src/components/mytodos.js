@@ -1,19 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 
 const MyTodos = () => {
+  const [todos, setTodos] = useState([]);
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+          // If access token is not found, set redirectToLogin to true
+          setRedirectToLogin(true);
+          return;
+        }
+        const response = await axios.get('http://localhost:8001/todos/', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setTodos(response.data);
+      } catch (error) {
+        console.error('Error fetching todos:', error);
+      }
+    };
+
+    fetchTodos();
+  }, []);
+  if (redirectToLogin) {
+    // If redirectToLogin is true, redirect to login page
+    return <Navigate to="/login" />
+  }
+
   return (
     <div>
-        <ul class="list-group">
-            <li class="list-group-item">
-                <strong>Title: </strong>Cras justo odio
-                <br></br>
-                <strong>Description: </strong>Description
-            </li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Morbi leo risus</li>
-            <li class="list-group-item">Porta ac consectetur ac</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-        </ul>
+      <h2>My Todos</h2>
+      <ul className="list-group">
+        {todos.map(todo => (
+          <li key={todo.id} className="list-group-item">
+            <strong>Title: </strong>{todo.title}
+            <br />
+            <strong>Description: </strong>{todo.description}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
