@@ -24,14 +24,16 @@ REACT_APP_ENVIRONMENT=development
 ### Tests and coverage
 The backend project is 97% covered by test cases. To run the testcases, 
 - Ensure the all containers are up and running.
-- Go to the backend container by issuing this command from the project root directory `docker-compose exec -it backend sh`
+- Go to the backend container shell by issuing this command from the project root directory `docker-compose exec -it backend sh`
 - Now run the command `python manage.py test`
+- To exit the shell issue command `exit` in the shell terminal.
 
 To see the test coverage report, run the tests with coverage and see the report. Do the following steps,
 - Ensure the all containers are up and running.
 - Go to the backend container by issuing this command from the project root directory `docker-compose exec -it backend sh`
 - Now run the command `coverage run manage.py test`
 - Now run the command `coverage report`
+- To exit the shell issue command `exit` in the shell terminal.
 
 ### Creating Admin User
 
