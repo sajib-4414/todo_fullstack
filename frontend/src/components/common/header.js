@@ -7,7 +7,6 @@ const Header = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const isSuperuser = localStorage.getItem('isSuperuser');
 
-  // Handle logout function
   const handleLogout = () => {
     // Remove accessToken, user data, and isSuperuser from localStorage
     localStorage.removeItem('accessToken');

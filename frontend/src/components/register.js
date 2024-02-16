@@ -26,7 +26,7 @@ const Register = () => {
     setErrors(newErrors);
     
     if (Object.keys(newErrors).length === 0) {
-      // Form is valid, make Axios call
+      // If Form is valid, make Axios call
       axios.post(`${process.env.REACT_APP_API_HOST}/auth/register/`, formData)
         .then(response => {
           // Handle successful registration

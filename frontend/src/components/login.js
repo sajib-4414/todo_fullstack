@@ -28,7 +28,7 @@ const Login = () => {
           // Store superuser status in localStorage
           localStorage.setItem('isSuperuser', response.data.user.superuser_status);
           
-          // Redirect to "/mytodos" page
+          
           window.location = "/";
         })
         .catch(error => {

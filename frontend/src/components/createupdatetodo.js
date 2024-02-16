@@ -35,7 +35,7 @@ const CreateUpdateTodo = () => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // Form is valid, make Axios call
+      // If the Form is valid, make Axios call
       const requestMethod = id ? 'put' : 'post';
       console.log("reading the api host", process.env.REACT_APP_API_HOST)
       const apiUrl = id ? `${process.env.REACT_APP_API_HOST}/todos/${id}/` : `${process.env.REACT_APP_API_HOST}/todos/`;
