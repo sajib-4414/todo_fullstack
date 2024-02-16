@@ -1,6 +1,8 @@
 # Todo List Full Stack Project
 
-This is a full-stack Todo List project that allows users to manage their todo items. The project is divided into dedicated backend and frontend. The project utilizes Django Rest Framework for the backend, PostgreSQL as the database, and ReactJS for the frontend. The entire application environment is containerized using Docker.
+This is a full-stack Todo List project that allows users to signup, login and manage their todo items(CRUD operation). It also allows an Admin user to manage application users.
+
+The project is divided into dedicated backend and frontend. The project utilizes Django Rest Framework for the backend, PostgreSQL as the database, and ReactJS for the frontend. The entire application environment is containerized using Docker.
 
 ### Installation
 
@@ -46,10 +48,10 @@ To create the first admin user:
 
 ### Django Admin Panel
 
-The Django Admin Panel can be accessed at `/admin`. Log in with the admin user credentials to manage users and create additional users, it can be regular user or admin user.
+The Django Admin Panel can be accessed at `localhost:8001/admin`. Log in with the admin user credentials to manage users and create additional users, it can be regular user or admin user.
 
 ## Backend APIS:
-The backend APIs include JWT authentication. Here are the available endpoints:
+The backend APIs include JWT authentication. When the applicaiton is running locally, the backend root url is `localhost:8001`. Here are the available endpoints:
 
 ### Authentication and User APIs
 
