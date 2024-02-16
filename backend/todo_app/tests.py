@@ -75,5 +75,3 @@ class TodoDetailUpdateDeleteViewTestCase(TestCase):
         response = self.client.delete(f'/todos/{self.todo.id}/')
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Todo.objects.count(), 0)
-
-

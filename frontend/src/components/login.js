@@ -16,7 +16,7 @@ const Login = () => {
 
     if (Object.keys(newErrors).length === 0) {
       // Form is valid, make Axios call
-      axios.post('http://localhost:8001/auth/login/', formData)
+      axios.post(`${process.env.REACT_APP_API_HOST}/auth/login/`, formData)
         .then(response => {
           // Handle successful login
           console.log(response.data);
@@ -25,13 +25,18 @@ const Login = () => {
           localStorage.setItem('user', JSON.stringify(response.data.user));
           localStorage.setItem('accessToken', response.data.token.access);
           localStorage.setItem('refreshToken', response.data.token.refresh);
+          // Store superuser status in localStorage
+          localStorage.setItem('isSuperuser', response.data.user.superuser_status);
           
           // Redirect to "/mytodos" page
-          window.location = "/mytodos";
+          window.location = "/";
         })
         .catch(error => {
           // Handle login error
           console.error('Login error:', error);
+          const newErrors = {};
+          newErrors.apierror = 'Invalid credentials';
+          setErrors(newErrors)
         });
     }
   };
@@ -64,6 +69,8 @@ const Login = () => {
           />
           {errors.password && <div className="text-danger">{errors.password}</div>}
         </div>
+
+        {errors.apierror && <div className="text-danger">{errors.apierror}</div>}
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>
     </div>

@@ -1,6 +1,6 @@
 version: '3'
 services:
-  todo-service:
+  backend:
     build:
       context: ./backend  # Relative path to the todo-service folder
       dockerfile: Dockerfile
@@ -10,12 +10,12 @@ services:
     ports:
       - "8001:8000"
     depends_on:
-      todo-db:
+      db:
         condition: service_healthy
     networks:
       - internal-net
 
-  todo-db:
+  db:
     image: postgres:15-alpine
     volumes:
       - ./todo_data:/var/lib/postgresql/data/
@@ -32,6 +32,19 @@ services:
       interval: 10s
       timeout: 3s
       retries: 3
+  
+  frontend:
+    build:
+      context: ./frontend  # Relative path to the frontend folder
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app  # Map the volume for the code in the frotnende folder
+    ports:
+      - "3000:3000"
+    networks:
+      - internal-net
+    environment:
+      - WATCHPACK_POLLING=true
 
 networks:
   internal-net:

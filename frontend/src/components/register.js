@@ -27,7 +27,7 @@ const Register = () => {
     
     if (Object.keys(newErrors).length === 0) {
       // Form is valid, make Axios call
-      axios.post('http://localhost:8001/auth/register/', formData)
+      axios.post(`${process.env.REACT_APP_API_HOST}/auth/register/`, formData)
         .then(response => {
           // Handle successful registration
           console.log(response.data);
@@ -36,12 +36,28 @@ const Register = () => {
           localStorage.setItem('user', JSON.stringify(response.data.user));
           localStorage.setItem('accessToken', response.data.token.access);
           localStorage.setItem('refreshToken', response.data.token.refresh);
-          // Redirect to "/mytodos" page
-          window.location = "/mytodos";
+          // Store superuser status in localStorage
+          localStorage.setItem('isSuperuser', response.data.user.superuser_status);
+          // Redirect to "/" page
+          window.location = "/";
         })
         .catch(error => {
           // Handle error
-          console.error('Registration error:', error);
+          if (error.response && error.response.data) {
+            // If the API returns an error response, update errors state with the error messages
+            const apiErrors = error.response.data;
+            const newErrors = {};
+            
+            let total_error_message = ""
+            Object.keys(apiErrors).forEach(key => {
+              total_error_message = total_error_message + apiErrors[key][0];
+            });
+            newErrors["apiError"] = total_error_message
+            setErrors(newErrors);
+          } else {
+            // If there's a generic error, log it
+            console.error('Registration error:', error);
+          }
         });
     }
   };
@@ -102,6 +118,7 @@ const Register = () => {
           {errors.confirmPassword && <div className="text-danger">{errors.confirmPassword}</div>}
         </div>
         <button type="submit" className="btn btn-primary">Register</button>
+        {errors.apiError && <div className="text-danger">{errors.apiError}</div>}
       </form>
     </div>
   );

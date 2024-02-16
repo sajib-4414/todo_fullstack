@@ -1,11 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
-const CreateTodo = () => {
+const CreateUpdateTodo = () => {
+  const { id } = useParams();
   const [formData, setFormData] = useState({ title: '', description: '' });
   const [errors, setErrors] = useState({});
   const accessToken = localStorage.getItem('accessToken');
+
+  useEffect(() => {
+    if (id) {
+      // Fetch existing Todo data if editing
+      axios.get(`${process.env.REACT_APP_API_HOST}/todos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+        .then(response => {
+          setFormData(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching Todo data for edit:', error);
+        });
+    }
+  }, [id, accessToken]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,23 +36,28 @@ const CreateTodo = () => {
 
     if (Object.keys(newErrors).length === 0) {
       // Form is valid, make Axios call
-      axios.post('http://localhost:8001/todos/', formData, {
+      const requestMethod = id ? 'put' : 'post';
+      console.log("reading the api host", process.env.REACT_APP_API_HOST)
+      const apiUrl = id ? `${process.env.REACT_APP_API_HOST}/todos/${id}/` : `${process.env.REACT_APP_API_HOST}/todos/`;
+      
+      axios[requestMethod](apiUrl, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
       })
         .then(response => {
-          // Handle successful todo creation
-          console.log('Todo created:', response.data);
+          // Handle successful todo creation/update
+          console.log('Todo saved:', response.data);
           // Redirect to root domain
           window.location = "/";
         })
         .catch(error => {
-          // Handle todo creation error
-          console.error('Todo creation error:', error);
+          // Handle todo creation/update error
+          console.error('Todo save error:', error);
         });
     }
   };
+  
 
   if (!accessToken) {
     // If accessToken is not present, redirect to login
@@ -43,7 +66,7 @@ const CreateTodo = () => {
 
   return (
     <div>
-      <h2>Create Todo</h2>
+      <h2>{id ? 'Edit Todo' : 'Create Todo'}</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="titleInput">Title</label>
@@ -69,10 +92,10 @@ const CreateTodo = () => {
           />
           {errors.description && <div className="text-danger">{errors.description}</div>}
         </div>
-        <button type="submit" className="btn btn-primary">Create Todo</button>
+        <button type="submit" className="btn btn-primary">{id ? 'Update' : 'Create'} Todo</button>
       </form>
     </div>
   );
 }
 
-export default CreateTodo;
+export default CreateUpdateTodo;

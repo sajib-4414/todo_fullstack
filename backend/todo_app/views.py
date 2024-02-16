@@ -28,6 +28,9 @@ class TodoListGetCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+"""
+Update and delete todos owned by the logged in user
+"""
 class TodoDetailUpdateDeleteView(APIView):
     permission_classes = [IsAuthenticated]
     

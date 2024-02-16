@@ -5,12 +5,14 @@ const Header = () => {
   // Check if accessToken and user data exist in localStorage
   const accessToken = localStorage.getItem('accessToken');
   const user = JSON.parse(localStorage.getItem('user'));
+  const isSuperuser = localStorage.getItem('isSuperuser');
 
   // Handle logout function
   const handleLogout = () => {
-    // Remove accessToken and user data from localStorage
+    // Remove accessToken, user data, and isSuperuser from localStorage
     localStorage.removeItem('accessToken');
     localStorage.removeItem('user');
+    localStorage.removeItem('isSuperuser');
     // Redirect to the login page
     window.location.href = '/login';
   };
@@ -27,14 +29,20 @@ const Header = () => {
           
           {accessToken && user ? (
             <>
+              
+              <li className="nav-item">
+                <Link className="nav-link" to="/todos">Create Todo</Link>
+              </li>
+              {isSuperuser === 'true' && (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/manageusers">Manage Users</Link>
+                </li>
+              )}
               <li className="nav-item">
                 <span className="nav-link">{user.username}</span>
               </li>
               <li className="nav-item">
                 <button className="btn btn-link nav-link" onClick={handleLogout}>Logout</button>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/createtodos">Create Todo</Link>
               </li>
             </>
           ) : (
